@@ -1,7 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<%--<html xmlns:th="http://www.thymeleaf.org">--%>
 <head>
     <meta charset="UTF-8">
     <title>Downloading</title>
@@ -19,6 +19,8 @@
         </thead>
         <tbody>
 
+        <%-- Code for using thymeleaf instead of jsp responsible for file download and delete function --%>
+
 <%--        <tr th:each="path : ${pathList}">--%>
 <%--            <td type="button" class="btn btn-success"><a th:href="@{/download(file_token=${path.get('file_token')--%>
 <%--                                                                                             })--%>
@@ -30,14 +32,6 @@
 <%--                                                                                        })--%>
 <%--                                                                  }"  style="color:#008000" class="text-center">Delete</a></td>--%>
 <%--        </tr>--%>
-
-<%--<c:forEach items="${pathList}" var="path">--%>
-<%--<tr>--%>
-<%--    <td type="button" class="btn btn-success"><a th:href="@{/download(file_token=${path.file_token})}" class="text-center">Download</a></td>--%>
-<%--    <td class="text-center">${path.path}</td>--%>
-<%--    <td type="button" class="btn btn-danger"><a th:href="@{/delete(id=${path.file_id},file_token=${path.file_token})}" style="color:#008000" class="text-center">Delete</a></td>--%>
-<%--</tr>--%>
-<%--</c:forEach>--%>
 
 <c:forEach items="${pathList}" var="path">
     <tr>

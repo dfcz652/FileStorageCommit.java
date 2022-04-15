@@ -1,11 +1,17 @@
 package com.boots.controller;
 
 import com.boots.entity.User;
+
 import com.boots.service.UserService;
+
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Controller;
+
 import org.springframework.ui.Model;
+
 import org.springframework.validation.BindingResult;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,6 +24,11 @@ public class RegistrationController {
     @Autowired
     private UserService userService;
 
+    /**
+     * Method returning registration page
+     * @param model
+     * @return registration
+     */
     @GetMapping("/registration")
     public String registration(Model model) {
         model.addAttribute("userForm", new User());
@@ -25,6 +36,13 @@ public class RegistrationController {
         return "registration";
     }
 
+    /**
+     * A method that checks if the password matches, if the username is busy and saves the logged in user to the DB<associated with userService.saveUser(userForm)>
+     * @param userForm
+     * @param bindingResult
+     * @param model
+     * @return redirect:/
+     */
     @PostMapping("/registration")
     public String addUser(@ModelAttribute("userForm") @Valid User userForm, BindingResult bindingResult, Model model) {
 

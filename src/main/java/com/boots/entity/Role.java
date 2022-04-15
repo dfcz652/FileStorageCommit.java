@@ -1,26 +1,29 @@
 package com.boots.entity;
 
 import lombok.Data;
+
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
+
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
 @Table(name = "t_role")
 @Data
 public class Role implements GrantedAuthority {
+
     @Id
     private Long id;
+
     private String name;
+
     @Transient
     @ManyToMany(mappedBy = "roles")
     private Set<User> users;
-    public Role() {
-    }
 
-    public Role(Long id) {
-        this.id = id;
+    public Role() {
     }
 
     public Role(Long id, String name) {
@@ -55,5 +58,27 @@ public class Role implements GrantedAuthority {
     @Override
     public String getAuthority() {
         return getRoleName();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Role role = (Role) o;
+        return Objects.equals(id, role.id) && Objects.equals(name, role.name) && Objects.equals(users, role.users);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, users);
+    }
+
+    @Override
+    public String toString() {
+        return "Role{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", users=" + users +
+                '}';
     }
 }
