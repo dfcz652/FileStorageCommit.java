@@ -78,10 +78,10 @@ public class UserService implements UserDetailsService {
      * @param userId
      * @return userFromDb or new User()
      */
-    public User findUserById(Long userId) {
-        Optional<User> userFromDb = userRepository.findById(userId);
-        return userFromDb.orElse(new User());
-    }
+//    public User findUserById(Long userId) {
+//        Optional<User> userFromDb = userRepository.findById(userId);
+//        return userFromDb.orElse(new User());
+//    }
 
     /**
      * Preparation for showing all users<associated with findAll()>

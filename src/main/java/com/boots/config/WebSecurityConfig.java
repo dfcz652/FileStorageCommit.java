@@ -1,7 +1,8 @@
 package com.boots.config;
 
-import com.boots.config.jwt.JwtFilter;
+//import com.boots.config.jwt.JwtFilter;
 
+import com.boots.config.jwt.AuthTokenFilter;
 import com.boots.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -28,21 +30,32 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     UserService userService;
 
     @Autowired
-    private JwtFilter jwtFilter;
+    //private JwtFilter jwtFilter;
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+    @Bean
+    public AuthTokenFilter authenticationJwtTokenFilter() {
+        return new AuthTokenFilter();
+    }
+
+    @Override
+    @Bean
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
+
     /**
      * Spring Security configuration with JWT setup
-     * @param httpSecurity
+     * @param http
      * @throws Exception
      */
     @Override
-    protected void configure(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity
+    protected void configure(HttpSecurity http) throws Exception {
+        http
                 .csrf()
                     .disable()
                 .authorizeRequests()
@@ -54,19 +67,23 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     //Доступ разрешен всем пользователей
                     .antMatchers("/", "/resources/**", "/auth").permitAll()
                 //Все остальные страницы требуют аутентификации
-//                .anyRequest().authenticated()
+                .anyRequest().authenticated()
                 .and()
                     //Настройка для входа в систему
                     .formLogin()
+                    .usernameParameter("username")
+                    .passwordParameter("password")
                     .loginPage("/login")
                     //Перенарпавление на главную страницу после успешного входа
-                    .defaultSuccessUrl("/")
+                    .defaultSuccessUrl("/loginSuccessUser")
                     .permitAll()
                 .and()
-                    .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                    //.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                     .logout()
                     .permitAll()
-                    .logoutSuccessUrl("/");
+                    .logoutSuccessUrl("/logoutSuccessUser");
+
+        http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
     /**
